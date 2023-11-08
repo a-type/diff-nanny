@@ -1,4 +1,4 @@
-# diff-nanny README
+# Diff Nanny
 
 Keeps a running tally of your git diff and lets you set warnings if you hit a threshold.
 
