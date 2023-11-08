@@ -1,8 +1,8 @@
 {
   "name": "diff-nanny",
-  "displayName": "diff-nanny",
-  "description": "Keep track of the git diff of working changes. For people who open massive PRs too often.",
-  "version": "0.0.1",
+  "displayName": "Diff Nanny",
+  "description": "Keep track of the git diff of working tree changes and warn at set thresholds. For people who open massive PRs too often.",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.84.0"
   },
