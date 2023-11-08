@@ -1,0 +1,79 @@
+{
+  "name": "diff-nanny",
+  "displayName": "diff-nanny",
+  "description": "Keep track of the git diff of working changes. For people who open massive PRs too often.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:.git"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": [
+      {
+        "title": "Diff Nanny Configuration",
+        "properties": {
+          "diffNanny.excludes": {
+            "type": "array",
+            "default": [
+              "*-lock.json",
+              "*-lock.yaml",
+              "*-lock.yml"
+            ],
+            "description": "Glob patterns to exclude from the diff."
+          },
+          "diffNanny.maxDiffTotal": {
+            "type": "number",
+            "default": 1000,
+            "description": "Maximum number of lines in the diff to trigger a warning. -1 to disable."
+          },
+          "diffNanny.maxDiffInserts": {
+            "type": "number",
+            "default": -1,
+            "description": "Maximum number of insertions in the diff to trigger a warning. -1 to disable."
+          },
+          "diffNanny.maxDiffRemovals": {
+            "type": "number",
+            "default": -1,
+            "description": "Maximum number of removals in the diff to trigger a warning. -1 to disable."
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/micromatch": "^4.0.5",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^8.52.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.0",
+    "typescript": "^5.2.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "micromatch": "^4.0.5"
+  }
+}
