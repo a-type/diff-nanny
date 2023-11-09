@@ -20,6 +20,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
   const maxTotal = config.get<number>('maxDiffTotal') ?? -1;
   const maxInsert = config.get<number>('maxDiffInserts') ?? -1;
   const maxDelete = config.get<number>('maxDiffRemovals') ?? -1;
+  const baseBranch = config.get<string>('baseBranch') ?? 'master';
 
   statusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
@@ -42,7 +43,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
   updateStatusBarItem();
 
   async function updateStatusBarItem(): Promise<void> {
-    const diffs = await getDiffs(rootPath, excludes);
+    const diffs = await getDiffs(rootPath, excludes, baseBranch);
     const { inserted, deleted } = diffs;
     statusBarItem.text = `$(diff-added) ${inserted} | $(diff-removed) ${deleted}`;
 
@@ -58,15 +59,6 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
       statusBarItem.backgroundColor = undefined;
     }
   }
-
-  let disposable = vscode.commands.registerCommand(
-    'diffNanny.helloWorld',
-    () => {
-      vscode.window.showInformationMessage('Hello World from Diff Nanny!');
-    },
-  );
-  subscriptions.push(disposable);
-  statusBarItem.show();
 }
 
 // This method is called when your extension is deactivated
@@ -81,17 +73,26 @@ export function deactivate() {}
 async function getDiffs(
   cwd: string,
   excludes: string[],
+  baseBranch?: string,
 ): Promise<{ inserted: number; deleted: number }> {
   try {
-    const { stdout } = await promisify(exec)(`git diff --numstat`, { cwd });
+    const diffCommand = `git diff ${baseBranch ?? ''} --numstat`;
+    console.debug(`diffNanny: Running diff command: ${diffCommand} in ${cwd}`);
+    const { stdout } = await promisify(exec)(diffCommand, { cwd });
     // filter out untracked file lines
-    const lines = stdout
+    const rawLines = stdout
       .split('\n')
       .filter((line) => line.match(/^\d+\t\d+\t/))
-      .map(parseDiffLine)
-      .filter((line) => {
-        return !micromatch.isMatch(line.filePath, excludes);
-      });
+      .map(parseDiffLine);
+    const lines = rawLines.filter((line) => {
+      return !micromatch.isMatch(line.filePath, excludes);
+    });
+
+    console.debug(
+      `diffNanny: ${lines.length} files diffed (${
+        lines.length - rawLines.length
+      } excluded by filters)`,
+    );
 
     return {
       inserted: lines.reduce((acc, line) => acc + line.inserted, 0),

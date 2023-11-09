@@ -19,6 +19,7 @@ For example:
 This extension contributes the following settings:
 
 - `diffNanny.excludes`: A list of glob patterns for files to exclude from the diff totals.
+- `diffNanny.baseBranch`: Specify a branch to diff against. Defaults to `main`. Use `""` to only track uncommitted changes.
 - `diffNanny.maxDiffTotal`: The warning threshold for total diff size (+ and -)
 - `diffNanny.maxDiffInserts`: The warning threshold for only inserts (+)
 - `diffNanny.maxDiffRemovals`: The warning threshold for only removals (-)
@@ -28,3 +29,9 @@ This extension contributes the following settings:
 ### 1.0.0
 
 Initial functionality with excludes and threshold limits.
+
+### 1.0.1
+
+Allow specifying a base branch to diff against, default to `main`. Now changes are for the whole working branch, not just uncommitted files.
+
+Also add some logging to diagnose Windows problems.

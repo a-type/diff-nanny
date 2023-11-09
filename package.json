@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/a-type/diff-nanny/issues"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -24,7 +24,7 @@
   "contributes": {
     "configuration": [
       {
-        "title": "Diff Nanny Configuration",
+        "title": "Diff Nanny",
         "properties": {
           "diffNanny.excludes": {
             "type": "array",
@@ -49,6 +49,11 @@
             "type": "number",
             "default": -1,
             "description": "Maximum number of removals in the diff to trigger a warning. -1 to disable."
+          },
+          "diffNanny.baseBranch": {
+            "type": "string",
+            "default": "main",
+            "description": "The base branch to compare against. If not provided, this will only track uncommitted working changes."
           }
         }
       }
