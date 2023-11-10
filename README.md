@@ -35,3 +35,7 @@ Initial functionality with excludes and threshold limits.
 Allow specifying a base branch to diff against, default to `main`. Now changes are for the whole working branch, not just uncommitted files.
 
 Also add some logging to diagnose Windows problems.
+
+### 1.0.1
+
+Fix a bug that made the status bar badge not show up.
