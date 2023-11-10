@@ -59,6 +59,8 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
       statusBarItem.backgroundColor = undefined;
     }
   }
+
+  statusBarItem.show();
 }
 
 // This method is called when your extension is deactivated
